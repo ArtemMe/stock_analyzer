@@ -31,11 +31,11 @@ class TelegramHook(
     }
 
     private fun handleCallback(callbackQuery: CallbackQuery?) : SendMessage {
-        return dispatcherService.createResponse(callbackQuery)
+        return dispatcherService.handleCallback(callbackQuery)
     }
 
     fun handleInputMessage(message: Message?) : SendMessage {
-        return dispatcherService.createResponse(message)
+        return dispatcherService.handleMessage(message)
     }
 
     override fun getBotToken(): String? {
