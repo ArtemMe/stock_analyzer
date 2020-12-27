@@ -1,4 +1,4 @@
-package com.mezh.heroku_demo.controller
+package com.artem.mezh.stock_analyzer.controller
 
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
