@@ -5,7 +5,6 @@ import com.artem.mezh.stock_analyzer.supplier.dto.ExDividendDate
 import com.artem.mezh.stock_analyzer.supplier.dto.ShareDto
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
-import java.time.ZoneId
 import java.time.ZoneOffset
 
 @Service
@@ -18,6 +17,7 @@ class DividendsService(
     }
 
     fun getNextDividendDate(ticketName: String) : ExDividendDate {
+        //TODO обработать момент когда не приходит дивидет
         return yahooFinanceSupplier.getCompanySummaryByTicket2(ticketName).exDividendDate
     }
 
