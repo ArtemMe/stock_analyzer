@@ -13,25 +13,26 @@ class DividendsService(
 ) {
 
     fun getDividends(ticketName: String, startDateTime: LocalDateTime, endDateTime: LocalDateTime) : List<ShareDto> {
-        return orderByDate(yahooFinanceSupplier.getDividendByTicket2(ticketName, startDateTime, endDateTime))
+        return orderByDate(yahooFinanceSupplier.getDividendByTicket(ticketName, startDateTime, endDateTime))
     }
 
-    fun getNextDividendDate(ticketName: String) : ExDividendDate {
-        //TODO обработать момент когда не приходит дивидет
-        return yahooFinanceSupplier.getCompanySummaryByTicket2(ticketName).exDividendDate
+    fun getNextDividendDate(ticketName: String) : ExDividendDate? {
+        return yahooFinanceSupplier.getCompanySummaryByTicket(ticketName)
+                ?.exDividendDate
     }
 
     fun orderByDate(listShareDto: List<ShareDto>) : List<ShareDto> {
         return listShareDto.sortedBy { shareDto -> shareDto.date }
     }
 
-    fun getListNextDividendsDate(ticketList: List<String>): Map<String, LocalDateTime> {
+    fun getListNextDividendsDate(ticketList: List<String>): Map<String, LocalDateTime?> {
         return ticketList
-                .map { it to convertToDate(getNextDividendDate(it).raw) }
+                .map { it to convertToDate(getNextDividendDate(it)?.raw) }
                 .toMap()
     }
 
-    fun convertToDate(unixDateTime: Long) : LocalDateTime {
+    fun convertToDate(unixDateTime: Long?) : LocalDateTime? {
+        if(unixDateTime == null) return null
         return LocalDateTime.ofEpochSecond(unixDateTime,0, ZoneOffset.UTC)
     }
 }

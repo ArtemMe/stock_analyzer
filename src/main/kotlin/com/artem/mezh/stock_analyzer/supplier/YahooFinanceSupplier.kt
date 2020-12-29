@@ -19,28 +19,24 @@ import java.time.ZoneOffset
 class YahooFinanceSupplier(
         private val dividendsParser: DividendsParser,
         private val quoteSummaryParser: QuoteSummaryParser,
-        private val yahooFinanceConfig: YahooFinanceConfig,
         private val yahooFinanceApi: YahooFinanceApi
 ) {
-    fun getDividendByTicket2(ticketName: String, startDateTime: LocalDateTime, endDateTime: LocalDateTime): List<ShareDto> {
+    fun getDividendByTicket(ticketName: String, startDateTime: LocalDateTime, endDateTime: LocalDateTime): List<ShareDto> {
         val result = yahooFinanceApi.charInfo(
                 ticketName,
                 buildReqParam(ticketName, startDateTime, endDateTime))
 
-        return dividendsParser.getDividends(getAsString(result?.body()!!))
+        return dividendsParser.getDividends(getAsString(result?.body()))
     }
 
-    fun getCompanySummaryByTicket2(ticketName: String): CompanySummary {
+    fun getCompanySummaryByTicket(ticketName: String): CompanySummary? {
         val result = yahooFinanceApi.companyInfo(ticketName, "calendarEvents")
-        return quoteSummaryParser.getSummary(getAsString(result?.body()!!))
+        return quoteSummaryParser.getSummary(getAsString(result?.body()))
     }
 
-    fun getAsString(body: Response.Body) : String {
+    fun getAsString(body: Response.Body?) : String? {
+        if(body == null) return null
         return String(body.asInputStream()?.readAllBytes()!!)
-    }
-
-    private fun buildUrl(url: String, ticketName: String): String {
-        return String.format(url, ticketName)
     }
 
     private fun buildReqParam(ticketName: String,
@@ -58,34 +54,7 @@ class YahooFinanceSupplier(
         )
     }
 
-    private fun buildCalendarEventsReqParam(): Map<String, String> {
-        return mutableMapOf(
-                Pair("modules", "calendarEvents"),
-        )
-    }
-
     private fun getTimestamp(date: LocalDateTime): String {
         return date.atZone(ZoneId.ofOffset("UTC", ZoneOffset.ofHours(0))).toEpochSecond().toString()
     }
-
-    fun getDividendByTicket(ticketName: String, startDateTime: LocalDateTime, endDateTime: LocalDateTime): List<ShareDto> {
-        val restTemplate = RestTemplate()
-        val response: ResponseEntity<String> = restTemplate.getForEntity(
-                buildUrl(yahooFinanceConfig.chartUrl!!, ticketName),
-                String::class.java,
-                buildReqParam(ticketName, startDateTime, endDateTime))
-
-        return dividendsParser.getDividends(response.body)
-    }
-
-    fun getCompanySummaryByTicket(ticketName: String): CompanySummary {
-        val restTemplate = RestTemplate()
-        val response: ResponseEntity<String> = restTemplate.getForEntity(
-                buildUrl(yahooFinanceConfig.quoteSummaryUrl!!, ticketName),
-                String::class.java,
-                buildCalendarEventsReqParam())
-
-        return quoteSummaryParser.getSummary(response.body)
-    }
-
 }

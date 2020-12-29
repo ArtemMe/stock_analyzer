@@ -23,17 +23,14 @@ class DividendsServiceTests : BaseIntegrationTests() {
 
         assert(VALID_HISTORY == result)
 	}
-//    LocalDateTime.of(2019, 8,14,13,30),
-//    LocalDateTime.of(2019, 11,20,14,30),
-//    LocalDateTime.of(2020, 5,20,13,30),
-//    LocalDateTime.of(2020, 2,19,14,30),
 
     @Test
     fun getNextDividend() {
         yahooFinanceQuoteSummary(wireMockServer)
         var result = dividendsService.getNextDividendDate("MSFT")
 
-        assert(result.fmt == "2021-03-11")
+        assert(result != null)
+        assert(result?.fmt == "2021-03-11")
     }
 
     @Test
@@ -45,11 +42,11 @@ class DividendsServiceTests : BaseIntegrationTests() {
         assert(result.get("CSCO") == LocalDateTime.of(2021, 3,11,0,0))
     }
 
-    fun printWithWhitespace(shareDto: ShareDto) {
-        print(shareDto.dividentPrice)
-        print(" ")
-        print(LocalDateTime.ofEpochSecond(shareDto.date, 0, ZoneOffset.UTC))
-        print("\n")
+    @Test
+    fun `return null if have not response from yahoo`() {
+        yahooFinanceQuoteSummaryEmptyDividend(wireMockServer)
+        var result = dividendsService.getNextDividendDate("MSFT")
+
     }
 
     companion object {

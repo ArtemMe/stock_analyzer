@@ -34,6 +34,13 @@ class BaseIntegrationTests {
                             .withBody(StringLoader.fromClasspath("/__files/quote_summary_response.json"))
                             .withStatus(OK.value())))
 
+    fun yahooFinanceQuoteSummaryEmptyDividend(wireMockServer: WireMockServer) =
+            wireMockServer.stubFor(get(urlPathMatching("/v10/finance/quoteSummary/.*"))
+                    .willReturn(aResponse()
+                            .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+                            .withBody(StringLoader.fromClasspath("/__files/quote_summary_empty_response.json"))
+                            .withStatus(OK.value())))
+
     fun yahooFinanceChart(wireMockServer: WireMockServer) =
             wireMockServer.stubFor(get(urlPathMatching("/v8/finance/chart/.*"))
                     .willReturn(aResponse()
