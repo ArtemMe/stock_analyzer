@@ -16,7 +16,7 @@ class MainMenuService(
         val replyKeyboardMarkup = mainMenuKeyboard
         return menuService.createMessageWithKeyboard(chatId, textMessage, replyKeyboardMarkup)
     }
-
+    //TODO нужно зарефачить и сделать расширяемое решение
     private val mainMenuKeyboard: ReplyKeyboardMarkup
         private get() {
             val replyKeyboardMarkup = ReplyKeyboardMarkup()
@@ -25,8 +25,11 @@ class MainMenuService(
             replyKeyboardMarkup.oneTimeKeyboard = false
             val keyboard: MutableList<KeyboardRow> = ArrayList()
             val row1 = KeyboardRow()
+            val row2 = KeyboardRow()
             row1.add(KeyboardButton(Command.FIND_EX_DIVIDEND.menuName))
+            row2.add(KeyboardButton(Command.ADD_TICKET_LIST.menuName))
             keyboard.add(row1)
+            keyboard.add(row2)
             replyKeyboardMarkup.keyboard = keyboard
             return replyKeyboardMarkup
         }

@@ -37,7 +37,7 @@ class UserService (
     private fun buildUserEntity(id: String): UserEntity {
         return UserEntity(
                 id = id,
-                tickets = null,
+                tickets = setOf(),
                 currentState = UserState.MAIN_MENU.name
         )
     }

@@ -29,6 +29,8 @@ class MainMenuHandler(
 
         return when {
             checkCommand(Command.FIND_EX_DIVIDEND, messageText) -> UserState.FIND_EX_DIVIDEND
+            checkCommand(Command.ADD_TICKET_LIST, messageText) -> UserState.ADD_TICKET_LIST
+            checkCommand(Command.CANCEL_COMMAND, messageText) -> UserState.CANCEL
             else -> null
         }
     }

@@ -7,6 +7,6 @@ import org.springframework.data.mongodb.core.mapping.Document
 data class UserEntity(
         @Id
         var id: String,
-        var tickets: List<String>? = null,
+        var tickets: Set<String> = setOf(),
         var currentState: String
 )
