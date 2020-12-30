@@ -4,8 +4,9 @@ import com.artem.mezh.stock_analyzer.supplier.dto.CompanySummary
 import com.artem.mezh.stock_analyzer.supplier.dto.ExDividendDate
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.jayway.jsonpath.DocumentContext
+import com.jayway.jsonpath.JsonPath
 import org.springframework.stereotype.Component
-import java.util.*
 
 @Component
 class QuoteSummaryParser {
@@ -41,6 +42,13 @@ class QuoteSummaryParser {
                 .path("error")
                 .path("description")
 
-        return errorDescription != null && !errorDescription.isEmpty
+        return errorDescription != null && !errorDescription.asText().isNullOrBlank()
+    }
+
+    fun getByPath(path: String, json: String) : String {
+        val path = "$.quoteSummary.result[0].calendarEvents.dividendDate"
+        val jsonContext: DocumentContext = JsonPath.parse(json)
+        val dividend: String = jsonContext.read(path)
+        return dividend
     }
 }

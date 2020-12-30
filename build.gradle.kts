@@ -32,6 +32,9 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.telegram:telegrambots-spring-boot-starter:4.9.1")
 
+    //json staff
+    implementation("com.jayway.jsonpath:json-path:2.5.0")
+
     //db
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 

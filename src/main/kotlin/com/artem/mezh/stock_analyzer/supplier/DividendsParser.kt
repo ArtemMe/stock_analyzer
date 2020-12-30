@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class DividendsParser {
+
+    //change parser to com.jayway.jsonpath
     fun getDividends(json: String?) : List<ShareDto> {
         val objectMapper = ObjectMapper()
 
