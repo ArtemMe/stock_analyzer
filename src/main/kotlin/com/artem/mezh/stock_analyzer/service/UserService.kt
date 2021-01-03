@@ -14,6 +14,10 @@ class UserService (
         return userRepository.findById(id.toString())
     }
 
+    fun findAll() : List<UserEntity> {
+        return userRepository.findAll()
+    }
+
     fun save(user: UserEntity): UserEntity {
         return userRepository.save(user)
     }
@@ -24,21 +28,22 @@ class UserService (
         return userRepository.save(actualUser)
     }
 
-    fun createUserIfEmpty(userId: Int): UserEntity {
+    fun createUserIfEmpty(userId: Int, chatId: Long): UserEntity {
         val userOpt = findUserById(userId)
         if (userOpt.isEmpty) {
-            val newUser = buildUserEntity(userId.toString())
+            val newUser = buildUserEntity(userId.toString(), chatId)
             return save(newUser)
         }
 
         return userOpt.get()
     }
 
-    private fun buildUserEntity(id: String): UserEntity {
+    private fun buildUserEntity(id: String, chatId: Long): UserEntity {
         return UserEntity(
                 id = id,
                 tickets = setOf(),
-                currentState = UserState.MAIN_MENU.name
+                currentState = UserState.MAIN_MENU.name,
+                chatId = chatId
         )
     }
 }

@@ -5,7 +5,8 @@ import org.springframework.context.annotation.Configuration
 
 @EnableConfigurationProperties(
         BotConfig::class,
-        TaskConfig::class
+        TaskConfig::class,
+        YahooFinanceConfig::class
 )
 @Configuration
 class PropertiesConfiguration

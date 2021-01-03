@@ -1,0 +1,29 @@
+logging:
+  level:
+     org.springframework.web.client.RestTemplate: DEBUG
+
+spring:
+  data:
+    mongodb:
+        uri: ${ATLAS_MONGO_DB_URI}
+
+yahoo-finance:
+  quote-summary-url: "https://query1.finance.yahoo.com/v10/finance/quoteSummary/"
+  chart-url: "https://query1.finance.yahoo.com/v8/finance/chart/"
+  url: "https://query1.finance.yahoo.com"
+
+
+telegrambot:
+  userName: ${TELEGRAM_BOT_USER}
+  botToken: ${TELEGRAM_BOT_TOKEN}
+  webHookPath: ${TELEGRAM_WEBHOOK}
+  proxyType: SOCKS5
+  proxyHost: localhost
+  proxyPort: 9150
+
+telegram:
+  url: "https://api.telegram.org/bot${telegrambot.botToken}"
+
+ping-task:
+  url: https://www.google.com
+  period: 1000

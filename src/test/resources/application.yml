@@ -1,0 +1,16 @@
+yahoo-finance:
+  quote-summary-url: "http://localhost:${wiremock.server.port}/v10/finance/quoteSummary/"
+  chart-url: "http://localhost:${wiremock.server.port}/v8/finance/chart/"
+  url: "http://localhost:${wiremock.server.port}"
+
+telegrambot:
+  userName: "${TELEGRAM_BOT_USER}"
+  botToken: ${TELEGRAM_BOT_TOKEN}
+  webHookPath: ${TELEGRAM_WEBHOOK}
+  proxyType: SOCKS5
+  proxyHost: localhost
+  proxyPort: 9150
+
+ping-task:
+  url: "https://www.google.com"
+  period: 120000

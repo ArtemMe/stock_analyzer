@@ -7,4 +7,5 @@ enum class ExceptionType(
         NOT_FOUND_EXERCISES("Пустое сообщение!"),
         NOT_FOUND_TREATMENT("Пустое сообщение!"),
         EMPTY_CALLBACK("Пустое сообщение!"),
+        CANCEL_COMMAND_PASSED("Пустое сообщение!"),
 }

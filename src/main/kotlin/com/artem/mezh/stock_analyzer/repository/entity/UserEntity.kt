@@ -8,5 +8,7 @@ data class UserEntity(
         @Id
         var id: String,
         var tickets: Set<String> = setOf(),
-        var currentState: String
+        var shares: Set<ShareEntity> = setOf(),
+        var currentState: String,
+        var chatId: Long
 )

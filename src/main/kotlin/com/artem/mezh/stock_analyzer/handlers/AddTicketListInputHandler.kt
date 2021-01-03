@@ -1,22 +1,34 @@
 package com.artem.mezh.stock_analyzer.handlers
 
+import com.artem.mezh.stock_analyzer.Command
 import com.artem.mezh.stock_analyzer.exceptions.ExceptionType
 import com.artem.mezh.stock_analyzer.exceptions.HandlerException
+import com.artem.mezh.stock_analyzer.repository.entity.ShareEntity
 import com.artem.mezh.stock_analyzer.repository.entity.UserState
+import com.artem.mezh.stock_analyzer.service.DividendsService
 import com.artem.mezh.stock_analyzer.service.UserService
 import com.artem.mezh.stock_analyzer.service.menu.MainMenuService
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
+import java.lang.Thread.sleep
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import java.util.stream.IntStream
 
 @Service
 class AddTicketListInputHandler(
         private val menuService: MainMenuService,
-        private val userService: UserService
+        private val userService: UserService,
+        private val dividendsService: DividendsService,
 ) : MainMenuHandlerI {
 
     override fun handle(context: CommandContext): SendMessage {
-        checkCancelCommand(context.message.text, context.message.chatId)
+
+        //todo move to base class
+        if(checkOnCancelCommand(context)) {
+            userService.updateState(context.user, UserState.MAIN_MENU)
+            return menuService.getMenu(context.message.chatId, "Вы вернулись в главное меню")
+        }
 
         userService.updateState(context.user, UserState.MAIN_MENU)
         val tickets = checkMessageText(context.message.text)
@@ -54,11 +66,34 @@ class AddTicketListInputHandler(
 
     private fun addTicketsToUser(userId: String, newTickets: Set<String>) {
         val user = userService.findUserById(userId.toInt()).get()
-        user.tickets.union(newTickets)
+        user.tickets = user.tickets.union(newTickets)
+
+        val shares = createShareEntityFromTickets(newTickets)
+        user.shares = user.shares.union(shares)
+
         userService.save(user)
     }
 
-    private fun checkCancelCommand(text: String?, chatId: Long) {
-        if(text == UserState.CANCEL.name) throw HandlerException(ExceptionType.EMPTY_INPUT, chatId, "Вернемся в зад")
+    private fun createShareEntityFromTickets(tickets: Set<String>) : Set<ShareEntity> {
+        return tickets.mapNotNull { createShareEntity(it) }
+                .toSet()
+    }
+
+    private fun createShareEntity(ticket: String) : ShareEntity? {
+        val response = dividendsService.getNextDividendDate(ticket)
+                ?: return null
+
+        //todo need to figure out something else
+        sleep(200)
+
+        return ShareEntity(
+                ticket,
+                LocalDateTime.ofEpochSecond(response.raw,0, ZoneOffset.UTC)
+        )
+    }
+
+    private fun checkOnCancelCommand(commandContext: CommandContext) : Boolean {
+        val text = commandContext.message.text
+        return text != null && text == Command.CANCEL_COMMAND.menuName
     }
 }

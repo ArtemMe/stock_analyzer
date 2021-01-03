@@ -9,7 +9,7 @@ import java.time.ZoneOffset
 
 @Service
 class DividendsService(
-        private val yahooFinanceSupplier: YahooFinanceSupplier
+        private val yahooFinanceSupplier: YahooFinanceSupplier,
 ) {
 
     fun getDividends(ticketName: String, startDateTime: LocalDateTime, endDateTime: LocalDateTime) : List<ShareDto> {

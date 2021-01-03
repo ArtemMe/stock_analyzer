@@ -1,5 +1,8 @@
 package com.artem.mezh.stock_analyzer.handlers
 
+import com.artem.mezh.stock_analyzer.Command
+import com.artem.mezh.stock_analyzer.exceptions.ExceptionType
+import com.artem.mezh.stock_analyzer.exceptions.HandlerException
 import com.artem.mezh.stock_analyzer.repository.entity.UserState
 import com.artem.mezh.stock_analyzer.service.DividendsService
 import com.artem.mezh.stock_analyzer.service.UserService
@@ -17,6 +20,13 @@ class FindExDividendInputDateHandler(
 ) : MainMenuHandlerI {
 
     override fun handle(context: CommandContext): SendMessage {
+
+        //todo move to base class
+        if(checkOnCancelCommand(context)) {
+            userService.updateState(context.user, UserState.MAIN_MENU)
+            return menuService.getMenu(context.message.chatId, "Вы вернулись в главное меню")
+        }
+
         userService.updateState(context.user, UserState.MAIN_MENU)
         val ticket = checkMessageText(context.message.text)
         val exDividendDate = getDividend(ticket)
@@ -38,5 +48,10 @@ class FindExDividendInputDateHandler(
                 ?: return "Не найдено"
 
         return exDividend.fmt
+    }
+
+    private fun checkOnCancelCommand(commandContext: CommandContext) : Boolean {
+        val text = commandContext.message.text
+        return text != null && text == Command.CANCEL_COMMAND.menuName
     }
 }
