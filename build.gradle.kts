@@ -43,6 +43,8 @@ dependencies {
     testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner:3.0.0")
     testImplementation ("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
     testImplementation("com.google.guava:guava:28.1-jre")
+    testImplementation ("org.testcontainers:testcontainers:1.15.0-rc2")
+    testImplementation ("org.testcontainers:mongodb:1.15.0-rc2")
 }
 
 tasks.withType<KotlinCompile> {

@@ -4,12 +4,15 @@ yahoo-finance:
   url: "http://localhost:${wiremock.server.port}"
 
 telegrambot:
-  userName: "${TELEGRAM_BOT_USER}"
-  botToken: ${TELEGRAM_BOT_TOKEN}
-  webHookPath: ${TELEGRAM_WEBHOOK}
+  userName: qwerty
+  botToken: qwerty
+  webHookPath: qwerty
   proxyType: SOCKS5
   proxyHost: localhost
   proxyPort: 9150
+
+telegram:
+  url: "https://api.telegram.org/bot${telegrambot.botToken}"
 
 ping-task:
   url: "https://www.google.com"
